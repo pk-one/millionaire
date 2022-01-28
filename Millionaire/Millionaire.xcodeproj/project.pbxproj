@@ -13,6 +13,10 @@
 		A0DE60FE27A47F4200D5F4B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0DE60FD27A47F4200D5F4B7 /* Assets.xcassets */; };
 		A0DE610127A47F4200D5F4B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0DE60FF27A47F4200D5F4B7 /* LaunchScreen.storyboard */; };
 		A0DE610927A47F5B00D5F4B7 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DE610827A47F5B00D5F4B7 /* GameViewController.swift */; };
+		A0DE610D27A4824300D5F4B7 /* UIStackView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DE610C27A4824300D5F4B7 /* UIStackView + Extensions.swift */; };
+		A0DE610F27A4832D00D5F4B7 /* UIColor + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DE610E27A4832D00D5F4B7 /* UIColor + Extensions.swift */; };
+		A0DE611127A487C100D5F4B7 /* ResultsGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DE611027A487C100D5F4B7 /* ResultsGameViewController.swift */; };
+		A0DE611327A48A7600D5F4B7 /* UIView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DE611227A48A7600D5F4B7 /* UIView + Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +28,10 @@
 		A0DE610027A47F4200D5F4B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A0DE610227A47F4200D5F4B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A0DE610827A47F5B00D5F4B7 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		A0DE610C27A4824300D5F4B7 /* UIStackView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView + Extensions.swift"; sourceTree = "<group>"; };
+		A0DE610E27A4832D00D5F4B7 /* UIColor + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extensions.swift"; sourceTree = "<group>"; };
+		A0DE611027A487C100D5F4B7 /* ResultsGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsGameViewController.swift; sourceTree = "<group>"; };
+		A0DE611227A48A7600D5F4B7 /* UIView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +64,35 @@
 		A0DE60F327A47F4000D5F4B7 /* Millionaire */ = {
 			isa = PBXGroup;
 			children = (
-				A0DE60F427A47F4000D5F4B7 /* AppDelegate.swift */,
 				A0DE60F627A47F4000D5F4B7 /* SceneDelegate.swift */,
 				A0DE60F827A47F4000D5F4B7 /* MainViewController.swift */,
+				A0DE611027A487C100D5F4B7 /* ResultsGameViewController.swift */,
 				A0DE610827A47F5B00D5F4B7 /* GameViewController.swift */,
+				A0DE60F427A47F4000D5F4B7 /* AppDelegate.swift */,
+				A0DE610A27A4822700D5F4B7 /* Extensions */,
 				A0DE60FD27A47F4200D5F4B7 /* Assets.xcassets */,
 				A0DE60FF27A47F4200D5F4B7 /* LaunchScreen.storyboard */,
 				A0DE610227A47F4200D5F4B7 /* Info.plist */,
 			);
 			path = Millionaire;
+			sourceTree = "<group>";
+		};
+		A0DE610A27A4822700D5F4B7 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A0DE610B27A4823400D5F4B7 /* UIKit */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A0DE610B27A4823400D5F4B7 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				A0DE610C27A4824300D5F4B7 /* UIStackView + Extensions.swift */,
+				A0DE610E27A4832D00D5F4B7 /* UIColor + Extensions.swift */,
+				A0DE611227A48A7600D5F4B7 /* UIView + Extensions.swift */,
+			);
+			path = UIKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,9 +165,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0DE611327A48A7600D5F4B7 /* UIView + Extensions.swift in Sources */,
 				A0DE610927A47F5B00D5F4B7 /* GameViewController.swift in Sources */,
 				A0DE60F927A47F4000D5F4B7 /* MainViewController.swift in Sources */,
 				A0DE60F527A47F4000D5F4B7 /* AppDelegate.swift in Sources */,
+				A0DE611127A487C100D5F4B7 /* ResultsGameViewController.swift in Sources */,
+				A0DE610F27A4832D00D5F4B7 /* UIColor + Extensions.swift in Sources */,
+				A0DE610D27A4824300D5F4B7 /* UIStackView + Extensions.swift in Sources */,
 				A0DE60F727A47F4000D5F4B7 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -209,7 +241,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -264,7 +296,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
