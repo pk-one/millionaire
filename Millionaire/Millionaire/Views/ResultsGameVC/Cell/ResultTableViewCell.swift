@@ -21,7 +21,6 @@ class ResultTableViewCell: UITableViewCell {
     private let totalQuestionLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20)
-        label.text = "Всего вопросов в игре: 10"
         label.textColor = .specialButton
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -30,16 +29,14 @@ class ResultTableViewCell: UITableViewCell {
     private let totalСorrectAnswersLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20)
-        label.text = "Всего правильных ответов: 7"
         label.textColor = .specialButton
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let totalWinMoneyLabel: UILabel = {
+    private let totalPercentCorrectQuestionLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20)
-        label.text = "Выигрыш: 100000"
         label.textColor = .specialButton
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -60,10 +57,15 @@ class ResultTableViewCell: UITableViewCell {
         selectionStyle = .none
         
         addSubview(cellBackgroundView)
-        cellBackgroundView.addSubview(totalWinMoneyLabel)
+        cellBackgroundView.addSubview(totalPercentCorrectQuestionLabel)
         cellBackgroundView.addSubview(totalQuestionLabel)
         cellBackgroundView.addSubview(totalСorrectAnswersLabel)
-       
+    }
+    
+    func configure(result: GameSession) {
+        totalQuestionLabel.text = "Всего вопросов: \(result.countQuestion)"
+        totalСorrectAnswersLabel.text = "Всего правильных ответов: \(result.countCorrectQuestions)"
+        totalPercentCorrectQuestionLabel.text = "\(result.countCorrectQuestions * 100 / result.countQuestion) %"
     }
 }
 
@@ -82,13 +84,13 @@ extension ResultTableViewCell {
         
         
         NSLayoutConstraint.activate([
-            totalWinMoneyLabel.topAnchor.constraint(equalTo: cellBackgroundView.topAnchor, constant: 10),
-            totalWinMoneyLabel.leadingAnchor.constraint(equalTo: cellBackgroundView.leadingAnchor, constant: 10),
-            totalWinMoneyLabel.trailingAnchor.constraint(equalTo: cellBackgroundView.trailingAnchor, constant: -10)
+            totalPercentCorrectQuestionLabel.topAnchor.constraint(equalTo: cellBackgroundView.topAnchor, constant: 10),
+            totalPercentCorrectQuestionLabel.leadingAnchor.constraint(equalTo: cellBackgroundView.leadingAnchor, constant: 10),
+            totalPercentCorrectQuestionLabel.trailingAnchor.constraint(equalTo: cellBackgroundView.trailingAnchor, constant: -10)
         ])
         
         NSLayoutConstraint.activate([
-            totalQuestionLabel.topAnchor.constraint(equalTo: totalWinMoneyLabel.bottomAnchor, constant: 10),
+            totalQuestionLabel.topAnchor.constraint(equalTo: totalPercentCorrectQuestionLabel.bottomAnchor, constant: 10),
             totalQuestionLabel.leadingAnchor.constraint(equalTo: cellBackgroundView.leadingAnchor, constant: 10),
             totalQuestionLabel.trailingAnchor.constraint(equalTo: cellBackgroundView.trailingAnchor, constant: -10)
         ])

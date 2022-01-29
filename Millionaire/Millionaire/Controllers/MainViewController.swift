@@ -66,6 +66,7 @@ class MainViewController: UIViewController {
     
     @objc private func startGameTapped() {
         let gameVC = GameViewController()
+        gameVC.delegate = self
         gameVC.modalPresentationStyle = .fullScreen
         present(gameVC, animated: true)
     }
@@ -94,5 +95,11 @@ extension MainViewController {
         NSLayoutConstraint.activate([
             startGameButton.widthAnchor.constraint(equalToConstant: 250)
         ])
+    }
+}
+
+extension MainViewController: GameViewControllerDelegate {
+    func didEndGame(with result: GameSession) {
+        Game.shared.addResult(with: result)
     }
 }

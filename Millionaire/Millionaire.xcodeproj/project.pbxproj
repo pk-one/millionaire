@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A020E77527A4B9E7001655A1 /* UIViewController + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A020E77427A4B9E7001655A1 /* UIViewController + Extensions.swift */; };
+		A020E77827A4C138001655A1 /* Caretaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A020E77727A4C138001655A1 /* Caretaker.swift */; };
 		A0DE60F527A47F4000D5F4B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DE60F427A47F4000D5F4B7 /* AppDelegate.swift */; };
 		A0DE60F727A47F4000D5F4B7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DE60F627A47F4000D5F4B7 /* SceneDelegate.swift */; };
 		A0DE60F927A47F4000D5F4B7 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DE60F827A47F4000D5F4B7 /* MainViewController.swift */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		A020E77427A4B9E7001655A1 /* UIViewController + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extensions.swift"; sourceTree = "<group>"; };
+		A020E77727A4C138001655A1 /* Caretaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Caretaker.swift; sourceTree = "<group>"; };
 		A0DE60F127A47F4000D5F4B7 /* Millionaire.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Millionaire.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0DE60F427A47F4000D5F4B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0DE60F627A47F4000D5F4B7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -55,6 +57,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A020E77627A4C11F001655A1 /* Memento */ = {
+			isa = PBXGroup;
+			children = (
+				A020E77727A4C138001655A1 /* Caretaker.swift */,
+			);
+			path = Memento;
+			sourceTree = "<group>";
+		};
+		A020E77B27A56D13001655A1 /* Singleton */ = {
+			isa = PBXGroup;
+			children = (
+				A0DE611F27A49FC600D5F4B7 /* Game.swift */,
+			);
+			path = Singleton;
+			sourceTree = "<group>";
+		};
 		A0DE60E827A47F4000D5F4B7 = {
 			isa = PBXGroup;
 			children = (
@@ -74,14 +92,15 @@
 		A0DE60F327A47F4000D5F4B7 /* Millionaire */ = {
 			isa = PBXGroup;
 			children = (
+				A020E77B27A56D13001655A1 /* Singleton */,
 				A0DE611927A49AD100D5F4B7 /* Views */,
 				A0DE611827A49ABD00D5F4B7 /* Controllers */,
 				A0DE60F627A47F4000D5F4B7 /* SceneDelegate.swift */,
 				A0DE60F427A47F4000D5F4B7 /* AppDelegate.swift */,
 				A0DE611C27A49BF900D5F4B7 /* Models */,
-				A0DE611F27A49FC600D5F4B7 /* Game.swift */,
 				A0DE612127A4A00A00D5F4B7 /* GameSession.swift */,
 				A0DE610A27A4822700D5F4B7 /* Extensions */,
+				A020E77627A4C11F001655A1 /* Memento */,
 				A0DE60FD27A47F4200D5F4B7 /* Assets.xcassets */,
 				A0DE60FF27A47F4200D5F4B7 /* LaunchScreen.storyboard */,
 				A0DE610227A47F4200D5F4B7 /* Info.plist */,
@@ -230,6 +249,7 @@
 				A0DE612027A49FC600D5F4B7 /* Game.swift in Sources */,
 				A0DE610F27A4832D00D5F4B7 /* UIColor + Extensions.swift in Sources */,
 				A0DE610D27A4824300D5F4B7 /* UIStackView + Extensions.swift in Sources */,
+				A020E77827A4C138001655A1 /* Caretaker.swift in Sources */,
 				A0DE611727A4922A00D5F4B7 /* ResultTableViewCell.swift in Sources */,
 				A0DE612227A4A00A00D5F4B7 /* GameSession.swift in Sources */,
 				A0DE60F727A47F4000D5F4B7 /* SceneDelegate.swift in Sources */,

@@ -8,9 +8,8 @@
 import Foundation
 import UIKit
 
-protocol GameViewControllerDelegate {
-    var countQuestion: Int { get }
-    var countCorrectQuestions: Int { get }
+protocol GameViewControllerDelegate: AnyObject {
+    func didEndGame(with result: GameSession)
 }
 
 class GameViewController: UIViewController {
@@ -99,7 +98,6 @@ class GameViewController: UIViewController {
     private var secondStackView = UIStackView()
     private var stackView = UIStackView()
     
-    private let gameSession = GameSession()
     private var currentQuestion: Question?
     
     private let countQuestion = NumberQuestion.allCases.count //берем кол-во вопросов из енама
@@ -107,14 +105,14 @@ class GameViewController: UIViewController {
     
     private var numberQuestion = 0
     
+    weak var delegate: GameViewControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         countQuestionArray  = Array(1...countQuestion) //делаем массив по кол-ву вопросов
         setupViews()
         setConstraints()
         setupQuestion()
-        Game.shared.gameSession = gameSession
-       
     }
     
     private func setupViews() {
@@ -145,7 +143,6 @@ class GameViewController: UIViewController {
     }
     
     private func generateQuestion() {
-        
         if !countQuestionArray.isEmpty {
             let randomIndex = Int(arc4random_uniform(UInt32(countQuestionArray.count)))
             let randomNumber = countQuestionArray[randomIndex]
@@ -157,7 +154,9 @@ class GameViewController: UIViewController {
             numberQuestion += 1
             currentQuestion = question
         } else {
-            createAlertOk(title: "Поздравляем", message: "Вы ответили на все \(numberQuestion) вопросов и победили в игре!!!") {
+            createAlertOk(title: "Поздравляем", message: "Вы ответили на все \(numberQuestion) вопросов и победили в игре!!!") { [self] in
+                self.delegate?.didEndGame(with: GameSession(countQuestion: countQuestion,
+                                                            countCorrectQuestions: numberQuestion))
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -166,11 +165,11 @@ class GameViewController: UIViewController {
     private func generateRandomNumberQuestion(number: Int) -> NumberQuestion {
         switch number {
         case 2: return .two
-//        case 3: return .three
-//        case 4: return .four
-//        case 5: return .five
-//        case 6: return .six
-//        case 7: return .seven
+        case 3: return .three
+        case 4: return .four
+        case 5: return .five
+        case 6: return .six
+        case 7: return .seven
         default: return .one
         }
     }
@@ -201,12 +200,13 @@ class GameViewController: UIViewController {
                 self.setupQuestion()
             }
         } else {
-            createAlertOk(title: "Проигрыш", message: "Вы ответили на \(numberQuestion - 1) вопросов.") {
-                self.dismiss(animated: true, completion: nil)
+            createAlertOk(title: "Проигрыш", message: "Вы ответили на \(numberQuestion - 1) вопросов.") { [self] in
+                self.delegate?.didEndGame(with: GameSession(countQuestion: countQuestion,
+                                                            countCorrectQuestions: numberQuestion - 1))
+                dismiss(animated: true, completion: nil)
             }
         }
     }
-        
 }
 
 
@@ -238,7 +238,6 @@ extension GameViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-//            stackView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3)
         ])
     }
 }

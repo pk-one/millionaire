@@ -64,7 +64,6 @@ class ResultsGameViewController: UIViewController {
     
     
     private func setDelegates() {
-        resultsTableView.delegate = self
         resultsTableView.dataSource = self
     }
     
@@ -74,19 +73,19 @@ class ResultsGameViewController: UIViewController {
     
 }
 
-//MARK: - UITableViewDelegate
-extension ResultsGameViewController: UITableViewDelegate {
-    
-}
 
 //MARK: - UITableViewDataSource
 extension ResultsGameViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        Game.shared.gameResults.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ResultTableViewCell", for: indexPath) as? ResultTableViewCell else { return UITableViewCell() }
+        
+        let result = Game.shared.gameResults[indexPath.row]
+        
+        cell.configure(result: result)
         
         return cell
     }

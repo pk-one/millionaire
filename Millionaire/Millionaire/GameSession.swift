@@ -6,11 +6,15 @@
 //
 
 import Foundation
+import UIKit
 
-class GameSession {
+class GameSession: Codable {
     
-    let countQuestion = 0
-    let countCorrectQuestions = 0
-//    let countWinMoney = 0
+    var countQuestion = 0
+    var countCorrectQuestions = 0
     
+    init(countQuestion: Int, countCorrectQuestions: Int) {
+        self.countQuestion = countQuestion
+        self.countCorrectQuestions = countCorrectQuestions
+    }
 }
