@@ -66,12 +66,14 @@ class MainViewController: UIViewController {
     
     @objc private func startGameTapped() {
         let gameVC = GameViewController()
+        gameVC.modalPresentationStyle = .fullScreen
         present(gameVC, animated: true)
     }
     
     @objc private func resultsGameTapped() {
-        let gameVC = GameViewController()
-        present(gameVC, animated: true)
+        let resultsVC = ResultsGameViewController()
+        resultsVC.modalPresentationStyle = .fullScreen
+        present(resultsVC, animated: true)
     }
 }
 
@@ -92,29 +94,5 @@ extension MainViewController {
         NSLayoutConstraint.activate([
             startGameButton.widthAnchor.constraint(equalToConstant: 250)
         ])
-    }
-}
-
-
-
-//MARK: - SwiftUI
-import SwiftUI
-
-struct MainVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let mainVC = MainViewController()
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<MainVCProvider.ContainerView>) -> MainViewController {
-            return mainVC
-        }
-        
-        func updateUIViewController(_ uiViewController: MainVCProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<MainVCProvider.ContainerView>) {
-            
-        }
     }
 }

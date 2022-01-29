@@ -8,6 +8,11 @@
 import Foundation
 import UIKit
 
+protocol GameViewControllerDelegate {
+    var countQuestion: Int { get }
+    var countCorrectQuestions: Int { get }
+}
+
 class GameViewController: UIViewController {
     
     private let questionBackgroundView: UIView = {
@@ -31,63 +36,61 @@ class GameViewController: UIViewController {
     private let questionTextLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18)
-        label.text = "В каком году, Юрий Гагарин полетел в космос?"
         label.numberOfLines = 0
+        label.textAlignment = .justified
         label.textColor = .specialButton
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    
-    
     private let firstAnswerButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Первый ответ", for: .normal)
         button.tintColor = .specialButton
         button.backgroundColor = .white
         button.titleLabel?.font = .systemFont(ofSize: 15)
-        button.addTarget(self, action: #selector(firstAnswerTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
         button.layer.cornerRadius = 10
         button.addShadowOnView()
+        button.tag = 1
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private let secondAnswerButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Второй ответ", for: .normal)
         button.tintColor = .specialButton
         button.backgroundColor = .white
         button.titleLabel?.font = .systemFont(ofSize: 15)
-        button.addTarget(self, action: #selector(secondAnswerTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
         button.layer.cornerRadius = 10
         button.addShadowOnView()
+        button.tag = 2
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private let thirdAnswerButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Третий ответ", for: .normal)
         button.tintColor = .specialButton
         button.backgroundColor = .white
         button.titleLabel?.font = .systemFont(ofSize: 15)
-        button.addTarget(self, action: #selector(thirdAnswerTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
         button.layer.cornerRadius = 10
         button.addShadowOnView()
+        button.tag = 3
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private let fourthAnswerButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Четвертый ответ", for: .normal)
         button.tintColor = .specialButton
         button.backgroundColor = .white
         button.titleLabel?.font = .systemFont(ofSize: 15)
-        button.addTarget(self, action: #selector(fourthAnswerTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
         button.layer.cornerRadius = 10
         button.addShadowOnView()
+        button.tag = 4
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -96,10 +99,22 @@ class GameViewController: UIViewController {
     private var secondStackView = UIStackView()
     private var stackView = UIStackView()
     
+    private let gameSession = GameSession()
+    private var currentQuestion: Question?
+    
+    private let countQuestion = NumberQuestion.allCases.count //берем кол-во вопросов из енама
+    private var countQuestionArray = [Int]()
+    
+    private var numberQuestion = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        countQuestionArray  = Array(1...countQuestion) //делаем массив по кол-ву вопросов
         setupViews()
         setConstraints()
+        setupQuestion()
+        Game.shared.gameSession = gameSession
+       
     }
     
     private func setupViews() {
@@ -129,21 +144,69 @@ class GameViewController: UIViewController {
         view.addSubview(stackView)
     }
     
-    @objc private func firstAnswerTapped() {
+    private func generateQuestion() {
         
+        if !countQuestionArray.isEmpty {
+            let randomIndex = Int(arc4random_uniform(UInt32(countQuestionArray.count)))
+            let randomNumber = countQuestionArray[randomIndex]
+            countQuestionArray.remove(at: randomIndex)
+        
+            let randomNumberQuestion = generateRandomNumberQuestion(number: randomNumber) // генерируем вопрос по рандомному числу
+            
+            let question = Question.getQuestion(with: randomNumberQuestion) // получаем вопрос
+            numberQuestion += 1
+            currentQuestion = question
+        } else {
+            createAlertOk(title: "Поздравляем", message: "Вы ответили на все \(numberQuestion) вопросов и победили в игре!!!") {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
-    @objc private func secondAnswerTapped() {
-        
+    private func generateRandomNumberQuestion(number: Int) -> NumberQuestion {
+        switch number {
+        case 2: return .two
+//        case 3: return .three
+//        case 4: return .four
+//        case 5: return .five
+//        case 6: return .six
+//        case 7: return .seven
+        default: return .one
+        }
     }
     
-    @objc private func thirdAnswerTapped() {
+    private func setupQuestion() {
+        generateQuestion()
         
+        guard let question = currentQuestion?.question,
+            let firstAnswer = currentQuestion?.answer[0].answer,
+            let secondAnswer = currentQuestion?.answer[1].answer,
+            let thirdAnswer = currentQuestion?.answer[2].answer,
+            let fourthAnswer = currentQuestion?.answer[3].answer else { return }
+        
+        numberOfQuestionLabel.text = "Вопрос \(numberQuestion)"
+        questionTextLabel.text = question
+        firstAnswerButton.setTitle("\(firstAnswer)", for: .normal)
+        secondAnswerButton.setTitle("\(secondAnswer)", for: .normal)
+        thirdAnswerButton.setTitle("\(thirdAnswer)", for: .normal)
+        fourthAnswerButton.setTitle("\(fourthAnswer)", for: .normal)
     }
     
-    @objc private func fourthAnswerTapped() {
+    @objc private func answerTapped(sender: UIButton) {
         
+        let correctAnswer = currentQuestion?.correctAnswer
+        
+        if sender.tag == correctAnswer {
+            DispatchQueue.main.async {
+                self.setupQuestion()
+            }
+        } else {
+            createAlertOk(title: "Проигрыш", message: "Вы ответили на \(numberQuestion - 1) вопросов.") {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
+        
 }
 
 
@@ -177,28 +240,5 @@ extension GameViewController {
             stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
 //            stackView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3)
         ])
-    }
-}
-
-
-//MARK: - SwiftUI
-import SwiftUI
-
-struct GameVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let gameVC = GameViewController()
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<GameVCProvider.ContainerView>) -> GameViewController {
-            return gameVC
-        }
-        
-        func updateUIViewController(_ uiViewController: GameVCProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<GameVCProvider.ContainerView>) {
-            
-        }
     }
 }
