@@ -11,6 +11,7 @@ class Game {
     static let shared = Game()
     
     var gameSession: GameSession?
+    var isActiveRandom: Bool? = false
     
     private let resultCaretaker = Caretaker()
     
@@ -30,5 +31,9 @@ class Game {
     
     func clearResult() {
         self.gameResults = []
+    }
+    
+    func toggleIsActive() {
+        self.isActiveRandom?.toggle()
     }
 }

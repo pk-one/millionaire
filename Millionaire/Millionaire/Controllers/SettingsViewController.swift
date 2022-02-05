@@ -44,6 +44,7 @@ class SettingsViewController: UIViewController {
     private let randomQuestionsSwitch: UISwitch = {
         let randomSwitch = UISwitch()
         randomSwitch.onTintColor = .specialButton
+        randomSwitch.addTarget(self, action: #selector(switchValueDidChange), for: .valueChanged)
         randomSwitch.translatesAutoresizingMaskIntoConstraints = false
         return randomSwitch
     }()
@@ -52,6 +53,7 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         setConstraints()
+        checkIsOn()
     }
     
     override func viewDidLayoutSubviews() {
@@ -68,9 +70,24 @@ class SettingsViewController: UIViewController {
         view.addSubview(randomQuestionsSwitch)
     }
     
+    private func checkIsOn() {
+        guard let isActiveRandom = Game.shared.isActiveRandom else { return }
+        if isActiveRandom {
+            randomQuestionsSwitch.setOn(true, animated: true)
+        } else {
+            randomQuestionsSwitch.setOn(false, animated: true)
+        }
+    }
+    
+    @objc func switchValueDidChange(sender: UISwitch) {
+        Game.shared.toggleIsActive()
+    }
+    
     @objc private func closeButtonTapped() {
         self.dismiss(animated: true, completion: nil)
     }
+    
+    
 }
 
 

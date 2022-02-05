@@ -100,14 +100,10 @@ class GameViewController: UIViewController {
     
     private var allQuestionArray: [Question]?
     private var currentQuestionArray: [Question]?
-//    private let countQuestion = NumberQuestion.allCases.count //берем кол-во вопросов из енама
-//    private var countQuestionArray = [Int]()
     
     private var numberQuestion = 0
     
     weak var delegate: GameViewControllerDelegate?
-    
-    var isActive = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,12 +141,15 @@ class GameViewController: UIViewController {
     }
     
     private func checkStrategy() {
+        guard let isActive = Game.shared.isActiveRandom else { return }
         if isActive {
             let chooser = StrategyChooser(strategy: RandomQuestions())
             allQuestionArray = chooser.getQuestions()
             currentQuestionArray = allQuestionArray
         } else {
-            print("huy")
+            let chooser = StrategyChooser(strategy: ConsecutiveQuestions())
+            allQuestionArray = chooser.getQuestions()
+            currentQuestionArray = allQuestionArray
         }
     }
     
