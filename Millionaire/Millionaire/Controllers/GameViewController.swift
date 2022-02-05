@@ -98,20 +98,22 @@ class GameViewController: UIViewController {
     private var secondStackView = UIStackView()
     private var stackView = UIStackView()
     
-    private var currentQuestion: Question?
-    
-    private let countQuestion = NumberQuestion.allCases.count //берем кол-во вопросов из енама
-    private var countQuestionArray = [Int]()
+    private var allQuestionArray: [Question]?
+    private var currentQuestionArray: [Question]?
+//    private let countQuestion = NumberQuestion.allCases.count //берем кол-во вопросов из енама
+//    private var countQuestionArray = [Int]()
     
     private var numberQuestion = 0
     
     weak var delegate: GameViewControllerDelegate?
     
+    var isActive = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        countQuestionArray  = Array(1...countQuestion) //делаем массив по кол-ву вопросов
         setupViews()
         setConstraints()
+        checkStrategy()
         setupQuestion()
     }
     
@@ -142,46 +144,35 @@ class GameViewController: UIViewController {
         view.addSubview(stackView)
     }
     
-    private func generateQuestion() {
-        if !countQuestionArray.isEmpty {
-            let randomIndex = Int(arc4random_uniform(UInt32(countQuestionArray.count)))
-            let randomNumber = countQuestionArray[randomIndex]
-            countQuestionArray.remove(at: randomIndex)
-        
-            let randomNumberQuestion = generateRandomNumberQuestion(number: randomNumber) // генерируем вопрос по рандомному числу
-            
-            let question = Question.getQuestion(with: randomNumberQuestion) // получаем вопрос
+    private func checkStrategy() {
+        if isActive {
+            let chooser = StrategyChooser(strategy: RandomQuestions())
+            allQuestionArray = chooser.getQuestions()
+            currentQuestionArray = allQuestionArray
+        } else {
+            print("huy")
+        }
+    }
+    
+    private func generateNumberQuestion() {
+        if !(currentQuestionArray?.isEmpty ?? false) {
             numberQuestion += 1
-            currentQuestion = question
         } else {
             createAlertOk(title: "Поздравляем", message: "Вы ответили на все \(numberQuestion) вопросов и победили в игре!!!") { [self] in
-                self.delegate?.didEndGame(with: GameSession(countQuestion: countQuestion,
+                self.delegate?.didEndGame(with: GameSession(countQuestion: allQuestionArray?.count ?? 0,
                                                             countCorrectQuestions: numberQuestion))
                 self.dismiss(animated: true, completion: nil)
             }
         }
     }
     
-    private func generateRandomNumberQuestion(number: Int) -> NumberQuestion {
-        switch number {
-        case 2: return .two
-        case 3: return .three
-        case 4: return .four
-        case 5: return .five
-        case 6: return .six
-        case 7: return .seven
-        default: return .one
-        }
-    }
-    
     private func setupQuestion() {
-        generateQuestion()
-        
-        guard let question = currentQuestion?.question,
-            let firstAnswer = currentQuestion?.answer[0].answer,
-            let secondAnswer = currentQuestion?.answer[1].answer,
-            let thirdAnswer = currentQuestion?.answer[2].answer,
-            let fourthAnswer = currentQuestion?.answer[3].answer else { return }
+        generateNumberQuestion()
+        guard let question = currentQuestionArray?.first?.question,
+            let firstAnswer = currentQuestionArray?.first?.answer[0].answer,
+            let secondAnswer = currentQuestionArray?.first?.answer[1].answer,
+            let thirdAnswer = currentQuestionArray?.first?.answer[2].answer,
+            let fourthAnswer = currentQuestionArray?.first?.answer[3].answer else { return }
         
         numberOfQuestionLabel.text = "Вопрос \(numberQuestion)"
         questionTextLabel.text = question
@@ -190,25 +181,26 @@ class GameViewController: UIViewController {
         thirdAnswerButton.setTitle("\(thirdAnswer)", for: .normal)
         fourthAnswerButton.setTitle("\(fourthAnswer)", for: .normal)
     }
-    
+
     @objc private func answerTapped(sender: UIButton) {
         
-        let correctAnswer = currentQuestion?.correctAnswer
-        
+        let correctAnswer = currentQuestionArray?.first?.correctAnswer
+
         if sender.tag == correctAnswer {
             DispatchQueue.main.async {
                 self.setupQuestion()
             }
+        currentQuestionArray?.removeFirst()
         } else {
             createAlertOk(title: "Проигрыш", message: "Вы ответили на \(numberQuestion - 1) вопросов.") { [self] in
-                self.delegate?.didEndGame(with: GameSession(countQuestion: countQuestion,
+                self.delegate?.didEndGame(with: GameSession(countQuestion: allQuestionArray?.count ?? 0,
                                                             countCorrectQuestions: numberQuestion - 1))
                 dismiss(animated: true, completion: nil)
             }
         }
     }
-}
 
+}
 
 //MARK: - setConstraints
 extension GameViewController {

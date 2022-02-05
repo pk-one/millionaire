@@ -42,6 +42,19 @@ class MainViewController: UIViewController {
         return button
     }()
     
+    private let settingsGameButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Настройки", for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = .specialButton
+        button.titleLabel?.font = .systemFont(ofSize: 28)
+        button.addTarget(self, action: #selector(settingsGameTapped), for: .touchUpInside)
+        button.layer.cornerRadius = 10
+        button.addShadowOnView()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private var stackView = UIStackView()
 
     override func viewDidLoad() {
@@ -56,7 +69,8 @@ class MainViewController: UIViewController {
         view.addSubview(logoImageView)
         
         stackView = UIStackView(arrangedSubviews: [startGameButton,
-                                                  resultsGameButton],
+                                                   resultsGameButton,
+                                                  settingsGameButton],
                                 axis: .vertical,
                                 spacing: 20,
                                 distribution: .fillProportionally)
@@ -75,6 +89,12 @@ class MainViewController: UIViewController {
         let resultsVC = ResultsGameViewController()
         resultsVC.modalPresentationStyle = .fullScreen
         present(resultsVC, animated: true)
+    }
+    
+    @objc private func settingsGameTapped() {
+        let settingsVC = SettingsViewController()
+        settingsVC.modalPresentationStyle = .fullScreen
+        present(settingsVC, animated: true)
     }
 }
 
