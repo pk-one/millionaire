@@ -47,7 +47,6 @@ class GameViewController: UIViewController {
         button.tintColor = .specialButton
         button.backgroundColor = .white
         button.titleLabel?.font = .systemFont(ofSize: 15)
-        button.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
         button.layer.cornerRadius = 10
         button.addShadowOnView()
         button.tag = 1
@@ -60,7 +59,6 @@ class GameViewController: UIViewController {
         button.tintColor = .specialButton
         button.backgroundColor = .white
         button.titleLabel?.font = .systemFont(ofSize: 15)
-        button.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
         button.layer.cornerRadius = 10
         button.addShadowOnView()
         button.tag = 2
@@ -73,7 +71,6 @@ class GameViewController: UIViewController {
         button.tintColor = .specialButton
         button.backgroundColor = .white
         button.titleLabel?.font = .systemFont(ofSize: 15)
-        button.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
         button.layer.cornerRadius = 10
         button.addShadowOnView()
         button.tag = 3
@@ -86,7 +83,6 @@ class GameViewController: UIViewController {
         button.tintColor = .specialButton
         button.backgroundColor = .white
         button.titleLabel?.font = .systemFont(ofSize: 15)
-        button.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
         button.layer.cornerRadius = 10
         button.addShadowOnView()
         button.tag = 4
@@ -110,7 +106,7 @@ class GameViewController: UIViewController {
         setupViews()
         setConstraints()
         checkStrategy()
-        setupQuestion()
+        setupQuestion(question: allQuestionArray?.first)
     }
     
     private func setupViews() {
@@ -165,29 +161,29 @@ class GameViewController: UIViewController {
         }
     }
     
-    private func setupQuestion() {
+    private func setupQuestion(question: Question?) {
+        
         generateNumberQuestion()
-        guard let question = currentQuestionArray?.first?.question,
-            let firstAnswer = currentQuestionArray?.first?.answer[0].answer,
-            let secondAnswer = currentQuestionArray?.first?.answer[1].answer,
-            let thirdAnswer = currentQuestionArray?.first?.answer[2].answer,
-            let fourthAnswer = currentQuestionArray?.first?.answer[3].answer else { return }
         
+        guard let question = question else { return }
+        let buttonsArray = [firstAnswerButton,
+                           secondAnswerButton,
+                           thirdAnswerButton,
+                           fourthAnswerButton]
         numberOfQuestionLabel.text = "Вопрос \(numberQuestion)"
-        questionTextLabel.text = question
-        firstAnswerButton.setTitle("\(firstAnswer)", for: .normal)
-        secondAnswerButton.setTitle("\(secondAnswer)", for: .normal)
-        thirdAnswerButton.setTitle("\(thirdAnswer)", for: .normal)
-        fourthAnswerButton.setTitle("\(fourthAnswer)", for: .normal)
+        questionTextLabel.text = question.question
+        buttonsArray.forEach { $0.addTarget(self, action: #selector(answerTapped(sender:)), for: .touchUpInside) }
+        for (button, answer) in zip(buttonsArray, question.answer) {
+            button.setTitle(answer.answer, for: .normal)
+            button.tag = answer.isCorrect ? 1 : 0
+        }
     }
-
+    
     @objc private func answerTapped(sender: UIButton) {
-        
-        let correctAnswer = currentQuestionArray?.first?.correctAnswer
-
-        if sender.tag == correctAnswer {
-            DispatchQueue.main.async {
-                self.setupQuestion()
+    
+        if sender.tag == 1 {
+            DispatchQueue.main.async { [self] in
+                self.setupQuestion(question: currentQuestionArray?.first)
             }
         currentQuestionArray?.removeFirst()
         } else {

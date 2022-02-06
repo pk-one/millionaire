@@ -10,10 +10,10 @@ import Foundation
 class Game {
     static let shared = Game()
     
-    var gameSession: GameSession?
+//    var gameSession: GameSession?
     var isActiveRandom: Bool? = false
     
-    private let resultCaretaker = Caretaker()
+    private let resultCaretaker = CaretakerGameSession()
     
     private init() {
         gameResults = resultCaretaker.load() ?? []
