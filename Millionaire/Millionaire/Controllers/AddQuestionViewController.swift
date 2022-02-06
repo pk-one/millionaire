@@ -8,12 +8,9 @@
 import Foundation
 import UIKit
 
-protocol AddQuestionViewControllerDelegate: AnyObject {
-    func didSaveQuestion(with question: Question) 
-}
 
 class AddQuestionViewController: UIViewController {
-    private let saver = CaretakerUserQuestions()
+
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -151,6 +148,9 @@ class AddQuestionViewController: UIViewController {
     
     private var arraySwitch = [UISwitch]()
     
+    private let userQuestionSaver = CaretakerUserQuestions()
+    private let userQuestionBuilder = QuestionBuilder()
+    
     private var isSwitch: Bool = false {
         didSet {
             arraySwitch.forEach { mySwitch in
@@ -170,8 +170,6 @@ class AddQuestionViewController: UIViewController {
     }
     
     private var numberSwitchActive: Int = 0
-    
-    weak var delegate: AddQuestionViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -214,6 +212,20 @@ class AddQuestionViewController: UIViewController {
                        fourthAnswerSwitch]
     }
     
+    private func setQuestion(questionString: String, answers: [(String, Bool)]) -> [Question] {
+        userQuestionBuilder.setQuestion(questionString: questionString)
+        
+        answers.forEach { answer, isCorrect in
+            userQuestionBuilder.setAnswers(answer: setAnswer(answer: answer, isCorrect: isCorrect) )
+        }
+        
+        return userQuestionBuilder.buildQuestion()
+    }
+    
+    private func setAnswer(answer: String, isCorrect: Bool) -> Answer {
+        Answer(answer: answer, isCorrect: isCorrect)
+    }
+    
     
     @objc private func closeButtonTapped() {
         self.dismiss(animated: true, completion: nil)
@@ -241,14 +253,18 @@ class AddQuestionViewController: UIViewController {
               let secondAnswerText = secondAnswerTextField.text,
               let thirdAnswerText = thirdAnswerTextField.text,
               let fourthAnswerText = fourthAnswerTextField.text else { return }
+        
+        let question = setQuestion(questionString: questionText, answers: [(firstAnswerText, firstAnswerSwitch.isOn),
+                                                                           (secondAnswerText, secondAnswerSwitch.isOn),
+                                                                           (thirdAnswerText, thirdAnswerSwitch.isOn),
+                                                                           (fourthAnswerText, fourthAnswerSwitch.isOn)])
               
-        saver.save(questionsArray: [Question(question: questionText, answer: [Answer(answer: firstAnswerText, isCorrect: firstAnswerSwitch.isOn),
-                                                                                  Answer(answer: secondAnswerText, isCorrect: secondAnswerSwitch.isOn),
-                                                                                  Answer(answer: thirdAnswerText, isCorrect: thirdAnswerSwitch.isOn),
-                                                                                  Answer(answer: fourthAnswerText, isCorrect: fourthAnswerSwitch.isOn)])])
+        userQuestionSaver.save(question: question)
                 
         dismiss(animated: true, completion: nil)
     }
+    
+   
 }
 
 //MARK: - setConstraints

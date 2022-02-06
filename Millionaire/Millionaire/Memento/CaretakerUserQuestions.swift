@@ -15,9 +15,9 @@ class CaretakerUserQuestions {
     }
     private let key = "CaretakerUserQuestionsKey"
     
-    func save(questionsArray: [Question]) {
+    func save(question: [Question]) {
         var oldQuestion = questions
-        oldQuestion.append(contentsOf: questionsArray)
+        oldQuestion.append(contentsOf: question)
         do {
             let data = try encoder.encode(oldQuestion)
             UserDefaults.standard.set(data, forKey: key)
