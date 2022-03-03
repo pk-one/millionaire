@@ -1,5 +1,5 @@
 //
-//  Caretaker.swift
+//  CaretakerGameSession.swift
 //  Millionaire
 //
 //  Created by Pavel Olegovich on 29.01.2022.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-class Caretaker {
+class CaretakerGameSession {
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
     
-    private let key = "key"
+    private let key = "CaretakerGameSessionKey"
     
     func save(results: [GameSession]) {
         do {

@@ -69,8 +69,6 @@ class ResultTableViewCell: UITableViewCell {
     }
 }
 
-
-
 //MARK: - setConstraints
 extension ResultTableViewCell {
     private func setConstraints() {
@@ -81,7 +79,6 @@ extension ResultTableViewCell {
             cellBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
             cellBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
-        
         
         NSLayoutConstraint.activate([
             totalPercentCorrectQuestionLabel.topAnchor.constraint(equalTo: cellBackgroundView.topAnchor, constant: 10),

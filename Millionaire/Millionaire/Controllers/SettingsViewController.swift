@@ -1,19 +1,19 @@
 //
-//  ResultsGameViewController.swift
+//  SettingsViewController.swift
 //  Millionaire
 //
-//  Created by Pavel Olegovich on 28.01.2022.
+//  Created by Pavel Olegovich on 05.02.2022.
 //
 
 import Foundation
 import UIKit
 
-class ResultsGameViewController: UIViewController {
+class SettingsViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 25)
-        label.text = "Результаты"
+        label.text = "Настройки"
         label.textColor = .white
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -31,24 +31,29 @@ class ResultsGameViewController: UIViewController {
         return button
     }()
     
-    private let resultsTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.bounces = false
-        tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear
-        tableView.showsVerticalScrollIndicator = false
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(ResultTableViewCell.self, forCellReuseIdentifier: "ResultTableViewCell")
-        return tableView
+    private let randomQuestionsLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 25)
+        label.text = "Рандомные вопросы:"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
-    
+ 
+    private let randomQuestionsSwitch: UISwitch = {
+        let randomSwitch = UISwitch()
+        randomSwitch.onTintColor = .specialButton
+        randomSwitch.addTarget(self, action: #selector(switchValueDidChange), for: .valueChanged)
+        randomSwitch.translatesAutoresizingMaskIntoConstraints = false
+        return randomSwitch
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupViews()
         setConstraints()
-        setDelegates()
+        checkIsOn()
     }
     
     override func viewDidLayoutSubviews() {
@@ -58,44 +63,37 @@ class ResultsGameViewController: UIViewController {
     
     private func setupViews() {
         view.backgroundColor = .specialBackground
+        
         view.addSubview(titleLabel)
         view.addSubview(closeButton)
-        view.addSubview(resultsTableView)
+        view.addSubview(randomQuestionsLabel)
+        view.addSubview(randomQuestionsSwitch)
     }
     
+    private func checkIsOn() {
+        guard let isActiveRandom = Game.shared.isActiveRandom else { return }
+        if isActiveRandom {
+            randomQuestionsSwitch.setOn(true, animated: true)
+        } else {
+            randomQuestionsSwitch.setOn(false, animated: true)
+        }
+    }
     
-    private func setDelegates() {
-        resultsTableView.dataSource = self
+    @objc func switchValueDidChange(sender: UISwitch) {
+        Game.shared.toggleIsActive()
     }
     
     @objc private func closeButtonTapped() {
         self.dismiss(animated: true, completion: nil)
     }
     
-}
-
-
-//MARK: - UITableViewDataSource
-extension ResultsGameViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        Game.shared.gameResults.count
-    }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ResultTableViewCell", for: indexPath) as? ResultTableViewCell else { return UITableViewCell() }
-        
-        let result = Game.shared.gameResults[indexPath.row]
-        
-        cell.configure(result: result)
-        
-        return cell
-    }
 }
+
 
 //MARK: - setConstraints
-extension ResultsGameViewController {
+extension SettingsViewController {
     private func setConstraints() {
-        
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  10),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
@@ -109,12 +107,14 @@ extension ResultsGameViewController {
             closeButton.widthAnchor.constraint(equalToConstant: 30)
         ])
         
+        NSLayoutConstraint.activate([
+            randomQuestionsLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40),
+            randomQuestionsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+        ])
         
         NSLayoutConstraint.activate([
-            resultsTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant:  10),
-            resultsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            resultsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            resultsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            randomQuestionsSwitch.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40),
+            randomQuestionsSwitch.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10)
         ])
     }
 }
